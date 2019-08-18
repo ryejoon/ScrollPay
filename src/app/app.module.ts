@@ -6,10 +6,12 @@ import { AppComponent } from './app.component';
 import { ExploreComponent } from './explore/explore.component';
 import { TextUploadComponent } from './upload/text-upload.component';
 import { ViewerComponent } from './viewer/viewer.component';
-import {MatButtonModule, MatToolbarModule} from '@angular/material';
+import {MatButtonModule, MatProgressBarModule, MatProgressSpinnerModule, MatToolbarModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule} from '@angular/forms';
 import { LoginComponent } from './login/login.component';
+import {HttpClientModule} from '@angular/common/http';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -20,12 +22,15 @@ import { LoginComponent } from './login/login.component';
     LoginComponent
   ],
   imports: [
+    HttpClientModule,
     MatToolbarModule,
     BrowserModule,
     AppRoutingModule,
     FlexLayoutModule,
     FormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

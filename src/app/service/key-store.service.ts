@@ -4,7 +4,7 @@ import bsv from 'bsv';
 export interface UserKey {
   privateKey: any;
   publicKey: any;
-  address: string;
+  address: any;
 }
 
 @Injectable({
@@ -16,13 +16,16 @@ export class KeyStoreService {
 
   constructor() { }
 
-
   get key(): UserKey {
     return this._key;
   }
 
   get privateKey(): string {
     return this._key.privateKey.toWIF();
+  }
+
+  get address(): string {
+    return this._key.address.toString();
   }
 
   public newCalendarKey() {

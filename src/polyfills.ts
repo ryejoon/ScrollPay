@@ -1,15 +1,9 @@
 /**
- * For bsv library
- * https://github.com/moneybutton/bsv/issues/92
+ * https://stackoverflow.com/questions/50371593/angular-6-uncaught-referenceerror-buffer-is-not-defined
  */
-(window as any).global = window;
-import { Buffer } from 'buffer';
+global.Buffer = global.Buffer || require('buffer').Buffer;
 import * as process from 'process';
-
-(window as any).global = window;
-(window as any).Buffer = Buffer;
 (window as any).process = process;
-
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
  * You can add your own extra polyfills to this file.
