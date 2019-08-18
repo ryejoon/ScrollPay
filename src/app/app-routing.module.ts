@@ -3,9 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 import {ExploreComponent} from './explore/explore.component';
 import {ViewerComponent} from './viewer/viewer.component';
 import {TextUploadComponent} from './upload/text-upload.component';
+import {LoginComponent} from './login/login.component';
 
 
 const routes: Routes = [
+  {
+    path: '', redirectTo: 'login', pathMatch: 'full'
+  },
+  {
+    path: 'login', component: LoginComponent
+  },
   {
     path: 'explore', component: ExploreComponent,
     children: [{

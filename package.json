@@ -22,9 +22,11 @@
     "@angular/platform-browser": "~8.2.0",
     "@angular/platform-browser-dynamic": "~8.2.0",
     "@angular/router": "~8.2.0",
+    "bsv": "^0.27.2",
+    "buffer": "^5.4.0",
+    "crypto-js": "^3.1.9-1",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
-    "crypto-js": "^3.1.9-1",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {

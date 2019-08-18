@@ -9,13 +9,15 @@ import { ViewerComponent } from './viewer/viewer.component';
 import {MatButtonModule, MatToolbarModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule} from '@angular/forms';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ExploreComponent,
     TextUploadComponent,
-    ViewerComponent
+    ViewerComponent,
+    LoginComponent
   ],
   imports: [
     MatToolbarModule,
