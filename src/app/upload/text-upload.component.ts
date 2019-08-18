@@ -6,6 +6,7 @@ import {SplitContent} from '../service/splitter/SplitContent';
 import {ScrollpayItem} from '../service/scrollpay/ScrollpayItem';
 import * as CryptoJS from 'crypto-js';
 import {FileUploaderService} from '../service/file-uploader.service';
+import {SplitPayOption} from '../service/split/SplitPayOption';
 
 @Component({
   selector: 'app-upload',
@@ -99,7 +100,7 @@ export class TextUploadComponent implements OnInit {
 
     return {
       lines: linesNum,
-      price: (this.priceSum) ? (this.priceSum) / (this.textSplitOption.chunks - 1) : '-'
+      price: (this.priceSum) ? Math.floor((this.priceSum) / (this.textSplitOption.chunks)) : '-'
     };
   }
 
@@ -121,5 +122,23 @@ export class TextUploadComponent implements OnInit {
     this.item.chunkSha256Hashes = hashes;
     console.log(hashes);
     this.splitContent.chunks.forEach(c => this.fileUploader.buildTextFileTx(c));
+    const scrollPay: ScrollpayItem<string> = {
+      title: this.item.title,
+      description: this.item.description,
+      preview: this.item.preview,
+      chunkSha256Hashes: hashes
+    };
+
+    const splitConfig: SplitPayOption = {
+      payToAddress: this.payToAddress,
+      splitType: 'range',
+      rangeStart: 0,
+      rangeEnd: this.splitContent.chunks.length,
+      priceUnit: 1,
+      price: Math.floor((this.priceSum) / (this.textSplitOption.chunks))
+    };
+
+    console.log(scrollPay);
+    console.log(splitConfig);
   }
 }

@@ -16,5 +16,4 @@ export interface SplitPayOption {
   // Exclusive
   rangeEnd?: number;
   priceUnit?: number;
-  previewCAddr?: string;
 }
