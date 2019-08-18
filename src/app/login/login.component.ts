@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
   }
 
   createKey() {
-    this.keyStore.newCalendarKey();
+    this.keyStore.newUserKey();
   }
 
   importKey() {

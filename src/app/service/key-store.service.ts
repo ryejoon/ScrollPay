@@ -21,14 +21,20 @@ export class KeyStoreService {
   }
 
   get privateKey(): string {
+    if (!this._key) {
+      return null;
+    }
     return this._key.privateKey.toWIF();
   }
 
   get address(): string {
+    if (!this._key) {
+      return null;
+    }
     return this._key.address.toString();
   }
 
-  public newCalendarKey() {
+  public newUserKey() {
     const privk = bsv.PrivateKey.fromRandom();
     this._key = {
       privateKey: privk,

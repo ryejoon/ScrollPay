@@ -1,7 +1,9 @@
 /**
  * https://stackoverflow.com/questions/50371593/angular-6-uncaught-referenceerror-buffer-is-not-defined
  */
-global.Buffer = global.Buffer || require('buffer').Buffer;
+declare var global;
+import * as buffer from 'buffer';
+global.Buffer = global.Buffer || buffer.Buffer;
 import * as process from 'process';
 (window as any).process = process;
 /**

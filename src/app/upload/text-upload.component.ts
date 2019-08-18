@@ -7,6 +7,7 @@ import {ScrollpayItem} from '../service/scrollpay/ScrollpayItem';
 import * as CryptoJS from 'crypto-js';
 import {FileUploaderService} from '../service/file-uploader.service';
 import {SplitPayOption} from '../service/split/SplitPayOption';
+import {KeyStoreService} from '../service/key-store.service';
 
 @Component({
   selector: 'app-upload',
@@ -55,7 +56,7 @@ import {SplitPayOption} from '../service/split/SplitPayOption';
 })
 export class TextUploadComponent implements OnInit {
   @ViewChild('textContentElem', {static: true}) textContentElem: ElementRef;
-  payToAddress: string;
+  payToAddress: string = this.keyStore.address;
   textSplitOption: TextSplitOption = {
     chunks: 100
   };
@@ -71,7 +72,8 @@ export class TextUploadComponent implements OnInit {
   splitContent: SplitContent<string, string>;
   fileContent: any;
 
-  constructor(private imageService: ImageService,
+  constructor(private keyStore: KeyStoreService,
+              private imageService: ImageService,
               private textSplitter: TextSplitterService,
               private fileUploader: FileUploaderService) { }
 
@@ -137,8 +139,6 @@ export class TextUploadComponent implements OnInit {
       priceUnit: 1,
       price: Math.floor((this.priceSum) / (this.textSplitOption.chunks))
     };
-
-    console.log(scrollPay);
-    console.log(splitConfig);
+    this.fileUploader.sendScrollpayProtocolTx(scrollPay, splitConfig);
   }
 }
