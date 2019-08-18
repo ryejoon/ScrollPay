@@ -44,10 +44,10 @@ export class ScrollPayData {
 
   // Split Protocol
   paytoAddress?: string;
-  rangeStart?: number;
-  rangeEnd?: number;
-  priceUnit?: number;
-  price?: number;
+  rangeStart?: string;
+  rangeEnd?: string;
+  priceUnit?: string;
+  price?: string;
 }
 
 export class Block {

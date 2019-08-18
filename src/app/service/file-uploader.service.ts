@@ -77,10 +77,10 @@ export class FileUploaderService {
       Const.SPLIT_PROTOCOL,
       split.payToAddress,
       split.splitType,
-      split.rangeStart,
-      split.rangeEnd,
-      split.priceUnit,
-      split.price
+      split.rangeStart.toString(),
+      split.rangeEnd.toString(),
+      split.priceUnit.toString(),
+      split.price.toString()
     ];
 
     const tx = {
