@@ -31,6 +31,23 @@ export class ImageService {
   constructor() { }
 
 
+  /*processImage(imageInput: HTMLInputElement) {
+    for (let i = 0; i < imageInput.files.length; i++) {
+      const file: File = imageInput.files[i];
+      const reader = new FileReader();
+      reader.addEventListener('load', (event: any) => {
+        const img = new FileSnippet(event.target.result, file);
+        this.compressImage(img)
+          .then(r => {
+            this.textContentElem.nativeElement.appendChild(r.resizedImg);
+            this.resizedImages.push(r);
+          });
+      });
+      reader.readAsDataURL(file);
+    }
+  }*/
+
+
   async compressImage(fileSnippet: FileSnippet): Promise<ResizedImage> {
     const response: ResizedImage = {
       reader: null, resizedImg: null, cHash: null

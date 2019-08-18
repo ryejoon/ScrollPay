@@ -8,6 +8,7 @@ import { UploadComponent } from './upload/upload.component';
 import { ViewerComponent } from './viewer/viewer.component';
 import {MatToolbarModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatToolbarModule,
     BrowserModule,
     AppRoutingModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

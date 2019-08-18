@@ -1,4 +1,6 @@
 export class Const {
+  public static SPLIT_PROTOCOL = '11111';
+  public static SPLIT_PUBLIC_PROTOCOL = '999999';
   public static B_PROTOCOL = '19HxigV4QyBv3tHpQVcUEQyq1pzZVdoAut';
 }
 
