@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {SplitContent} from './SplitContent';
-import {SplitPayOption} from '../protocol/SplitPayOption';
+import {SplitPayOption} from '../split/SplitPayOption';
 
 export interface TextSplitOption {
   chunks: number;
