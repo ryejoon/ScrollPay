@@ -4,9 +4,9 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ExploreComponent } from './explore/explore.component';
-import { UploadComponent } from './upload/upload.component';
+import { TextUploadComponent } from './upload/text-upload.component';
 import { ViewerComponent } from './viewer/viewer.component';
-import {MatToolbarModule} from '@angular/material';
+import {MatButtonModule, MatToolbarModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule} from '@angular/forms';
 
@@ -14,7 +14,7 @@ import {FormsModule} from '@angular/forms';
   declarations: [
     AppComponent,
     ExploreComponent,
-    UploadComponent,
+    TextUploadComponent,
     ViewerComponent
   ],
   imports: [
@@ -22,7 +22,8 @@ import {FormsModule} from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
     FlexLayoutModule,
-    FormsModule
+    FormsModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

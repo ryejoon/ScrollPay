@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {ExploreComponent} from './explore/explore.component';
 import {ViewerComponent} from './viewer/viewer.component';
-import {UploadComponent} from './upload/upload.component';
+import {TextUploadComponent} from './upload/text-upload.component';
 
 
 const routes: Routes = [
@@ -14,7 +14,7 @@ const routes: Routes = [
     }]
   },
   {
-    path: 'upload', component: UploadComponent
+    path: 'upload', component: TextUploadComponent
   }
 ];
 

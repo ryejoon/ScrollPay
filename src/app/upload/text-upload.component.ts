@@ -2,6 +2,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FileSnippet, ImageService, ResizedImage} from '../service/image.service';
 import {TextSplitOption, TextSplitterService} from '../service/splitter/text-splitter.service';
+import {SplitContent} from '../service/splitter/SplitContent';
 
 @Component({
   selector: 'app-upload',
@@ -17,17 +18,24 @@ import {TextSplitOption, TextSplitterService} from '../service/splitter/text-spl
           <input [(ngModel)]="payToAddress" placeholder="Your address to get paid">
           <input [(ngModel)]="textSplitOption.chunks" placeholder="Number of chunks">
       </div>
-      <div #textContentElem fxLayout="column">
+      <div *ngIf="splitContent" #textContentElem fxLayout="column">
+          <div *ngFor="let chunk of splitContent.chunks" fxLayout="row">
+            <textarea [ngStyle]="{backgroundColor: getColor(chunk)}" fxFlex="90">{{chunk}}</textarea>
+              <button mat-button (click)="setPreview(chunk)">Set As Preview</button>
+          </div>
       </div>
   `,
   styles: ['input {width: 100%}']
 })
-export class UploadComponent implements OnInit {
+export class TextUploadComponent implements OnInit {
   @ViewChild('textContentElem', {static: true}) textContentElem: ElementRef;
   payToAddress: string;
   textSplitOption: TextSplitOption = {
     chunks: 10
   };
+
+  preview: string;
+  splitContent: SplitContent<string, string>;
 
   constructor(private imageService: ImageService, private textSplitter: TextSplitterService) { }
 
@@ -40,19 +48,19 @@ export class UploadComponent implements OnInit {
     const reader = new FileReader();
     reader.addEventListener('load', (event: any) => {
       const content = event.target.result;
-      const splitResult = this.textSplitter.split(this.textSplitOption, content);
-      console.log(splitResult);
-      splitResult.chunks.forEach(chunk => {
-        chunk.split('\n')
-        const textNode = document.createElement('textarea');
-        textNode.appendChild(document.createTextNode(chunk));
-        // toggle background color
-        if (splitResult.chunks.indexOf(chunk) % 2 === 0) {
-          textNode.style.backgroundColor = 'beige';
-        }
-        this.textContentElem.nativeElement.appendChild(textNode);
-      });
+      this.splitContent = this.textSplitter.split(this.textSplitOption, content);
     });
     reader.readAsText(file, 'utf-8');
+  }
+
+  setPreview(chunk: string) {
+    this.preview = chunk;
+  }
+
+  getColor(chunk: string) {
+    if (chunk === this.preview) {
+      return 'pink';
+    }
+    return ((this.splitContent.chunks.indexOf(chunk) % 2) === 0) ? 'beige' : 'white';
   }
 }
