@@ -18,7 +18,7 @@ declare var moneyButton: any;
               Hello, {{keyStore.privateKey}}!<br>
               Please keep your key to meet again.
               <div *ngIf="!rendering">Balance : {{balanceService.getBalance$(keyStore.address) | async}} Satoshi</div>
-              <mat-progress-bar *ngIf="rendering" mode="indeterminate"></mat-progress-bar>
+              <mat-progress-spinner *ngIf="rendering" mode="indeterminate"></mat-progress-spinner>
           </div>
       </div>
       <div #moneyButtonElem></div>
@@ -66,9 +66,11 @@ export class LoginComponent implements OnInit {
         this.rendering = true;
         console.log('onPayment', arg);
         setTimeout(() => {
-          this.rendering = false;
           this.balanceService.refreshAddressInfo(address);
-        }, 5000);
+          setTimeout(() => {
+            this.rendering = false;
+          }, 1000);
+        }, 1000);
       },
       onError: (arg) => {
         console.log('onError', arg);

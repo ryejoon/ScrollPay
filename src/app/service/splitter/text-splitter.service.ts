@@ -24,11 +24,10 @@ export class TextSplitterService {
     let currentChunk = '';
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < lines.length; i++) {
-      if (i !== 0 && (i % linePerChunk === 0) || i === lines.length) {
+      currentChunk += (lines[i] + '\n');
+      if (i !== 0 && ((i % linePerChunk === 0) || i === lines.length)) {
         result.chunks.push(currentChunk);
         currentChunk = '';
-      } else {
-        currentChunk += (lines[i] + '\n');
       }
     }
     return result;
