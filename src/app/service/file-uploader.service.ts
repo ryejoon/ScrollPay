@@ -2,8 +2,8 @@
 import { Injectable } from '@angular/core';
 import {Const, Hosts} from '../const';
 import {KeyStoreService} from './key-store.service';
-import {ajax} from 'rxjs/ajax';
 import * as CryptoJS from 'crypto-js';
+import {HttpClient} from '@angular/common/http';
 
 declare var datapay: any;
 
@@ -12,20 +12,23 @@ declare var datapay: any;
 })
 export class FileUploaderService {
 
-  constructor(private keyStore: KeyStoreService) { }
+  constructor(private keyStore: KeyStoreService, private http: HttpClient) { }
 
   public uploadChunks(chunks: string[]) {
     chunks.forEach(c => this.buildTextFileTx(c));
   }
 
   public async alreadyUploaded(sha256Hash: string) {
-    return ajax.get(Hosts.cBitdbHost + sha256Hash).toPromise();
+    return this.http.get(Hosts.cBitdbHost + sha256Hash, {
+      responseType: 'text'
+    }).toPromise();
   }
 
   async buildTextFileTx(content: string) {
     const cHash = CryptoJS.SHA256(content).toString();
     const cApiResponse = await this.alreadyUploaded(cHash);
-    if (cApiResponse.response) {
+    if (cApiResponse) {
+      console.log(`Already uploaded : ${cHash}`);
       return;
     }
     console.log(`CHash : ${cHash}`);
@@ -37,7 +40,6 @@ export class FileUploaderService {
       'utf-8'
     ];
 
-    console.log(data);
     const tx = {
       safe: true,
       data: data,
