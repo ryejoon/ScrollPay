@@ -12,6 +12,7 @@ import {FormsModule} from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import {HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { StickyMenuComponent } from './sticky-menu/sticky-menu.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     ExploreComponent,
     TextUploadComponent,
     ViewerComponent,
-    LoginComponent
+    LoginComponent,
+    StickyMenuComponent
   ],
   imports: [
     HttpClientModule,
