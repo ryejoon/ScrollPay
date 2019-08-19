@@ -14,7 +14,7 @@ import {PaidStoreService} from '../service/paid-store.service';
           <h5>{{viewItem.description}}</h5>
       </div>
       <div class="text-content" #contentElem (scroll)="onScroll()"></div>
-        <mat-progress-bar mode="indeterminate" *ngIf="paidStore.isFetching"></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate" *ngIf="paidStore.isFetching"></mat-progress-bar>
   `,
   styles: ['h3 {text-align: center; width: 100%}', '.text-content {height: 100px;overflow: scroll}']
 })
@@ -29,15 +29,15 @@ export class ViewerComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe(pm => {
+      this.resetContent();
       const txid = pm.get('txid');
       this.scrollpayStore.scrollpayItems$
         .pipe(map(arr => arr.find(item => item.txid === txid)))
         .subscribe(d => {
-          this.resetContent();
           this.viewItem = d;
-          if (d && d.preview) {
+          /*if (d && d.preview) {
             this.renderLines(d.preview);
-          }
+          }*/
           //this.onScroll();
         });
     });
