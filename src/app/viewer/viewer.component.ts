@@ -16,7 +16,7 @@ const PAY_START_CHUNK = 1;
       <div *ngIf="viewItem" fxLayout="column">
           <h1>{{viewItem.title}}</h1>
           <h2>{{viewItem.description}}</h2>
-          <p>You have purchased {{paidStore.getPaidChunksCount(viewItem.txid)}} out of {{getChunkSize()}}</p>
+          <h5>You have purchased {{paidStore.getPaidChunksCount(viewItem.txid)}} out of {{getChunkSize()}} chunks. Price : {{viewItem.price}} Satoshi per a chunk</h5>
       </div>
       <div class="text-content" #contentElem (scroll)="onScroll()"></div>
       <button mat-stroked-button *ngIf="isContentSmallerThanView()" (click)="onScroll(true)">Load More</button>
