@@ -36,6 +36,8 @@ export class NeonScrollPayResponse extends NeonResponse<ScrollPayData> {
 //    split.price
 //    ];
 export class ScrollPayData {
+  txid: string;
+
   // Scrollpay Protocol
   title?: string;
   description: string;
