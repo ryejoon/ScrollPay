@@ -22,25 +22,36 @@ export class PaidStoreService {
               private neonGenesis: NeonGenesisService) {
     this.keyStore.userKey$.subscribe(uk => {
       if (uk) {
-        this.neonGenesis.getAllPaidItems(uk.address.toString())
-          .subscribe(r => {
-            const concat = r.c.concat(r.u);
-            concat.forEach(item => {
-              const pushData = item.pushdata;
-              if (parseInt(pushData.from, 10) >= parseInt(pushData.until, 10)) {
-                console.log(`Skipping invalid payment ${item.transaction}`);
-                return;
-              }
-              if (!this.paymentStore[pushData.itemid]) {
-                this.paymentStore[pushData.itemid] = new Set();
-              }
-              this.paymentStore[pushData.itemid].add(parseInt(pushData.from, 10));
-            });
-            console.log(`Purchased Chunks :`);
-            console.log(this.paymentStore);
-          });
+        this.refreshPaymentRecord(uk.address.toString());
       }
     });
+  }
+
+  private refreshPaymentRecord(address: string) {
+    this.paymentStore = {};
+    this.neonGenesis.getAllPaidItems(address)
+      .subscribe(r => {
+        const concat = r.c.concat(r.u);
+        concat.forEach(item => {
+          const pushData = item.pushdata;
+          if (parseInt(pushData.from, 10) >= parseInt(pushData.until, 10)) {
+            console.log(`Skipping invalid payment ${item.transaction}`);
+            return;
+          }
+          if (!this.paymentStore[pushData.itemid]) {
+            this.paymentStore[pushData.itemid] = new Set();
+          }
+          this.paymentStore[pushData.itemid].add(parseInt(pushData.from, 10));
+        });
+        console.log(`Purchased Chunks :`);
+      });
+  }
+
+  getPaidChunksCount(itemKey: string) {
+    if (!this.paymentStore[itemKey]) {
+      return 0;
+    }
+    return this.paymentStore[itemKey].size;
   }
 
   // itemKey = txid of post tx
@@ -55,6 +66,7 @@ export class PaidStoreService {
       if (!payResult) {
         return;
       }
+      this.refreshPaymentRecord(this.keyStore.address);
     }
 
 

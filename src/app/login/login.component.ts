@@ -17,8 +17,6 @@ declare var moneyButton: any;
           <div fxLayout="column" fxLayoutAlign="start center">
               Hello, {{keyStore.privateKey}}!<br>
               Please keep your key to meet again.
-              <div *ngIf="!rendering">Balance : {{balanceService.getBalance$(keyStore.address) | async}} Satoshi</div>
-              <mat-progress-spinner *ngIf="rendering" mode="indeterminate"></mat-progress-spinner>
           </div>
       </div>
 
@@ -27,10 +25,9 @@ declare var moneyButton: any;
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private keyStore: KeyStoreService, private balanceService: BalanceService) { }
+  constructor(private keyStore: KeyStoreService) { }
   importedKey: string;
   errorMessage: string;
-  rendering: boolean;
 
   ngOnInit() {
   }

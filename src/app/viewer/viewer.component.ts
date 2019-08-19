@@ -16,6 +16,7 @@ const PAY_START_CHUNK = 1;
       <div *ngIf="viewItem" fxLayout="column">
           <h1>{{viewItem.title}}</h1>
           <h2>{{viewItem.description}}</h2>
+          <p>You have purchased {{paidStore.getPaidChunksCount(viewItem.txid)}} out of {{getChunkSize()}}</p>
       </div>
       <div class="text-content" #contentElem (scroll)="onScroll()"></div>
       <mat-progress-bar mode="indeterminate" *ngIf="paidStore.isFetching"></mat-progress-bar>
@@ -113,4 +114,7 @@ export class ViewerComponent implements OnInit {
     return diffFromBottom === 0;
   }
 
+  getChunkSize() {
+    return this.viewItem.chunkHashes.split(',').length;
+  }
 }
