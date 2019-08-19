@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Const} from '../const';
 import * as CryptoJS from 'crypto-js';
+import {Observable} from 'rxjs';
 
 declare var datapay: any;
 declare var imageCompression: any;
@@ -75,7 +76,7 @@ export class ImageService {
     return response;
   }
 
-  async buildImageFileTx(privateKey: string, image: ResizedImage) {
+  buildImageFileTx(privateKey: string, image: ResizedImage) {
     const data = [
       Const.B_PROTOCOL,
       image.reader.result,
@@ -93,8 +94,15 @@ export class ImageService {
       }
     };
 
-    datapay.send(tx, (err, res) => {
-      console.log(res);
+    return new Observable(subscriber => {
+      setTimeout(() => subscriber.error('Payment Timeout'), 5000);
+      datapay.send(tx, (err, res) => {
+        if (err) {
+          subscriber.error(err);
+        }
+        subscriber.next(res);
+        subscriber.complete();
+      });
     });
   }
 }

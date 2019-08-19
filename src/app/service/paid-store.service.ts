@@ -20,8 +20,8 @@ export class PaidStoreService {
   // itemKey = txid of post tx
   async getOrFetch(scrollpayItem: ScrollPayData, cHash: string) {
     const itemKey = scrollpayItem.txid;
-    const chunkIndex = scrollpayItem.chunkHashes.split(',').indexOf(cHash);
-    this.scrollpayWriter.payForChunk(scrollpayItem, cHash);
+    const payResult = await this.scrollpayWriter.payForChunk(scrollpayItem, cHash).toPromise();
+    console.log(payResult);
 
     if (!this.itemStore[itemKey]) {
       this.itemStore[itemKey] = {};

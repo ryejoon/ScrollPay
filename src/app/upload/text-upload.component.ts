@@ -123,7 +123,7 @@ export class TextUploadComponent implements OnInit {
     const hashes = this.splitContent.chunks.map(c => CryptoJS.SHA256(c).toString());
     this.item.chunkSha256Hashes = hashes;
     console.log(hashes);
-    this.splitContent.chunks.forEach(c => this.fileUploader.buildTextFileTx(c));
+    await Promise.all(this.splitContent.chunks.map(c => this.fileUploader.buildTextFileTx(c)));
     const scrollPay: ScrollpayItem<string> = {
       title: this.item.title,
       description: this.item.description,
@@ -139,6 +139,6 @@ export class TextUploadComponent implements OnInit {
       priceUnit: 1,
       price: Math.floor((this.priceSum) / (this.textSplitOption.chunks))
     };
-    //this.fileUploader.sendScrollpayProtocolTx(scrollPay, splitConfig);
+    this.fileUploader.sendScrollpayProtocolTx(scrollPay, splitConfig);
   }
 }
