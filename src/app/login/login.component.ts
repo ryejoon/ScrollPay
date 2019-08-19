@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
 
   createKey() {
     this.keyStore.newUserKey();
+    this.renderMoneyButton(this.keyStore.address);
   }
 
   importKey() {
@@ -56,6 +57,9 @@ export class LoginComponent implements OnInit {
     if (!this.moneyButtonElem) {
       return;
     }
+    this.rendering = true;
+    setTimeout(() => this.rendering = false, 2000);
+
     moneyButton.render(this.moneyButtonElem.nativeElement, {
       to: address,
       amount: '0.01',
@@ -69,8 +73,8 @@ export class LoginComponent implements OnInit {
           this.balanceService.refreshAddressInfo(address);
           setTimeout(() => {
             this.rendering = false;
-          }, 1000);
-        }, 1000);
+          }, 2000);
+        }, 2000);
       },
       onError: (arg) => {
         console.log('onError', arg);

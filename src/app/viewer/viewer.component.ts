@@ -11,7 +11,8 @@ import {PaidStoreService} from '../service/paid-store.service';
   template: `
       <div *ngIf="viewItem" fxLayout="column">
           <h3>{{viewItem.title}}</h3>
-          <h5>{{viewItem.description}}</h5>
+          <h4>{{viewItem.description}}</h4>
+          <h6>{{viewItem.preview}}</h6>
       </div>
       <div class="text-content" #contentElem (scroll)="onScroll()"></div>
       <mat-progress-bar mode="indeterminate" *ngIf="paidStore.isFetching"></mat-progress-bar>
@@ -46,9 +47,14 @@ export class ViewerComponent implements OnInit {
       if (!this.viewItem) {
         return;
       }
-      console.log(this.viewItem);
+      console.log(`Viewing chunk ${c}`);
       const nextHash = this.viewItem.chunkHashes.split(',')[c];
-      this.paidStore.getOrFetch(this.viewItem, nextHash).then(r => this.renderLines(r));
+      this.paidStore.getOrFetch(this.viewItem, nextHash).then(r => {
+        this.renderLines(r);
+        if (this.isScrollBottom()) {
+          setTimeout(() => this.onScroll(), 1000);
+        }
+      });
     });
   }
 
@@ -84,7 +90,8 @@ export class ViewerComponent implements OnInit {
     const scrollHeight = this.textContentElem.nativeElement.scrollHeight;
     const offsetHeight = this.textContentElem.nativeElement.offsetHeight;
     const scrollTop = this.textContentElem.nativeElement.scrollTop;
-    return (scrollHeight - (scrollTop + offsetHeight)) === 0;
+    const diffFromBottom = scrollHeight - (scrollTop + offsetHeight);
+    return diffFromBottom === 0;
   }
 
 }

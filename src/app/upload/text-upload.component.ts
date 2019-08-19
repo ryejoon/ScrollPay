@@ -8,6 +8,7 @@ import * as CryptoJS from 'crypto-js';
 import {FileUploaderService} from '../service/file-uploader.service';
 import {SplitPayOption} from '../service/split/SplitPayOption';
 import {KeyStoreService} from '../service/key-store.service';
+import {ScrollpayWriterService} from '../service/scrollpay-writer.service';
 
 @Component({
   selector: 'app-upload',
@@ -75,7 +76,8 @@ export class TextUploadComponent implements OnInit {
   constructor(private keyStore: KeyStoreService,
               private imageService: ImageService,
               private textSplitter: TextSplitterService,
-              private fileUploader: FileUploaderService) { }
+              private fileUploader: FileUploaderService,
+              private scrollPayWriter: ScrollpayWriterService) { }
 
   ngOnInit() {
   }
@@ -123,7 +125,7 @@ export class TextUploadComponent implements OnInit {
     const hashes = this.splitContent.chunks.map(c => CryptoJS.SHA256(c).toString());
     this.item.chunkSha256Hashes = hashes;
     console.log(hashes);
-    await Promise.all(this.splitContent.chunks.map(c => this.fileUploader.buildTextFileTx(c)));
+    await Promise.all(this.splitContent.chunks.map(c => this.fileUploader.buildTextFileTx(c).toPromise()));
     const scrollPay: ScrollpayItem<string> = {
       title: this.item.title,
       description: this.item.description,
@@ -139,6 +141,6 @@ export class TextUploadComponent implements OnInit {
       priceUnit: 1,
       price: Math.floor((this.priceSum) / (this.textSplitOption.chunks))
     };
-    this.fileUploader.sendScrollpayProtocolTx(scrollPay, splitConfig);
+    this.scrollPayWriter.sendScrollpayProtocolTx(scrollPay, splitConfig);
   }
 }

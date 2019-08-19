@@ -40,6 +40,9 @@ export class ScrollpayStoreService {
         return k;
       }
     });
+    if (emptyProperty) {
+      console.log(`Skip empty property ${emptyProperty} for ${data.title}`);
+    }
     return (emptyProperty) ? false : true;
   }
 }
