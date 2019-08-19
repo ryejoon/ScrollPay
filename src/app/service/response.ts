@@ -27,7 +27,7 @@ export class NeonScrollPayResponse extends NeonResponse<ScrollPayData> {
 //    scrollpay.preview,
 //    scrollpay.chunkSha256Hashes.toString(),
 //    '|',
-//    Const.SPLIT_PROTOCOL,
+//    Const.SPLITPAY_PROTOCOL,
 //    split.payToAddress,
 //    split.splitType,
 //    split.rangeStart,

@@ -29,11 +29,12 @@ export class ScrollpayWriterService {
       }
     });
     const chunkIndex = scrollpayItem.chunkHashes.split(',').indexOf(cHash);
+    console.log(`Purchasing chunk index ${chunkIndex}`);
     const data = [
-      Const.SPLIT_PROTOCOL,
+      Const.SPLITPAY_PROTOCOL,
       scrollpayItem.txid,
       chunkIndex.toString(),
-      '1'
+      (chunkIndex + 1).toString()
       ];
 
     const tx = {
@@ -77,7 +78,7 @@ export class ScrollpayWriterService {
       scrollpay.preview,
       scrollpay.chunkSha256Hashes.toString(),
       '|',
-      Const.SPLIT_PROTOCOL,
+      Const.SPLITPAY_PROTOCOL,
       split.payToAddress,
       split.splitType,
       split.rangeStart.toString(),
