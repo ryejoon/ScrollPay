@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
       <router-outlet></router-outlet>
         <app-sticky-menu></app-sticky-menu>
   `,
-  styles: ['img {height: 100%}', '*:focus { outline: none !important; }']
+  styles: ['img {height: 50%}', '*:focus { outline: none !important; }']
 })
 export class AppComponent {
 }
