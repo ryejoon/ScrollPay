@@ -28,6 +28,7 @@ export class ViewerComponent implements OnInit {
               private route: ActivatedRoute,
               private paidStore: PaidStoreService) { }
 
+  retryCount = 0;
   ngOnInit() {
     this.route.paramMap.subscribe(pm => {
       this.resetContent();
@@ -49,10 +50,21 @@ export class ViewerComponent implements OnInit {
       }
       console.log(`Viewing chunk ${c}`);
       const nextHash = this.viewItem.chunkHashes.split(',')[c];
-      this.paidStore.getOrFetch(this.viewItem, nextHash).then(r => {
-        this.renderLines(r);
-        if (this.isScrollBottom()) {
-          setTimeout(() => this.onScroll(), 1000);
+      this.paidStore.getOrFetch(this.viewItem, nextHash)
+        .then(r => {
+          this.retryCount = 0;
+          this.renderLines(r);
+          if (this.isScrollBottom()) {
+            setTimeout(() => this.onScroll(), 1000);
+          }
+        }).catch(err => {
+        console.log(err);
+        if (this.retryCount <= 3) {
+          console.log(`Retrying...`);
+          this.retryCount = this.retryCount + 1;
+          setTimeout(() => this.viewingChunk.next(c), 500);
+        } else {
+          alert(`Max Retry Count reached. Unable to fetch chunk data. Please try again later`);
         }
       });
     });
