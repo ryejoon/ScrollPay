@@ -63,6 +63,10 @@ export class PaidStoreService {
       return;
     }
 
+    if (!this.paymentStore[itemKey]) {
+      this.paymentStore[itemKey] = new Set();
+    }
+
     if (this.paymentStore[itemKey].has(chunkIndex)) {
       console.log(`Already purchased chunk ${chunkIndex} from item ${itemKey}`);
     } else {
