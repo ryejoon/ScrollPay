@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "split-viewer": {
+    "scroll-pay": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/split-viewer",
+            "outputPath": "dist/scroll-pay",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -63,18 +63,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "split-viewer:build"
+            "browserTarget": "scroll-pay:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "split-viewer:build:production"
+              "browserTarget": "scroll-pay:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "split-viewer:build"
+            "browserTarget": "scroll-pay:build"
           }
         },
         "test": {
@@ -111,15 +111,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "split-viewer:serve"
+            "devServerTarget": "scroll-pay:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "split-viewer:serve:production"
+              "devServerTarget": "scroll-pay:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "split-viewer"
+  "defaultProject": "scroll-pay"
 }
