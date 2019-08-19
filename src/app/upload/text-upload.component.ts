@@ -139,6 +139,6 @@ export class TextUploadComponent implements OnInit {
       priceUnit: 1,
       price: Math.floor((this.priceSum) / (this.textSplitOption.chunks))
     };
-    this.fileUploader.sendScrollpayProtocolTx(scrollPay, splitConfig);
+    //this.fileUploader.sendScrollpayProtocolTx(scrollPay, splitConfig);
   }
 }

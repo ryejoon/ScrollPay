@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {NeonScrollPayResponse} from './response';
 import {Hosts} from '../const';
 import {tap} from 'rxjs/operators';
+import {ScrollpayStoreService} from './scrollpay-store.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,18 +13,25 @@ export class PaidStoreService {
   private itemStore: FetchedItems = {};
 
   constructor(private http: HttpClient,
-              private neonGenesis: NeonGenesisService) { }
+              private scorllpayStore: ScrollpayStoreService) { }
 
-  async getOrFetch(cHash: string) {
+  // itemKey = txid of post tx
+  async getOrFetch(itemKey: string, cHash: string) {
+    // TODO : pay & payment validation
     console.log(this.itemStore);
-    if (this.itemStore[cHash]) {
-      return this.itemStore[cHash];
+
+    if (!this.itemStore[itemKey]) {
+      this.itemStore[itemKey] = {};
+    }
+    const itemChunks = this.itemStore[itemKey];
+    if (itemChunks[cHash]) {
+      return itemChunks[cHash];
     }
     return this.http.get(Hosts.cBitdbHost + cHash, {
       responseType: 'text'
     }).pipe(tap(r => {
-      console.log(`cHash ${cHash} value cached: ${r}`);
-      this.itemStore[cHash] = r;
+      console.log(`Item ${itemKey} : cHash ${cHash} value cached: ${r}`);
+      itemChunks[cHash] = r;
       return r;
     })).toPromise();
   }
@@ -31,5 +39,7 @@ export class PaidStoreService {
 
 
 interface FetchedItems {
-  [cHash: string]: string;
+  [itemKey: string]: {
+    [cHash: string]: string;
+  };
 }

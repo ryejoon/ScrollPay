@@ -33,7 +33,7 @@ export class FileUploaderService {
       console.log(`Already uploaded : ${cHash}`);
       return;
     }
-    console.log(`CHash : ${cHash}`);
+    console.log(`CHash : ${cHash}, Content: ${content}`);
 
     const data = [
       Const.B_PROTOCOL,
@@ -42,13 +42,15 @@ export class FileUploaderService {
       'utf-8'
     ];
 
+    console.log(`Payload : ${data}`);
+
     const tx = {
       safe: true,
       data: data,
       pay: {
         key: this.keyStore.privateKey,
         rpc: 'https://api.bitindex.network',
-        feeb: 2.04
+        feeb: 2.14
       }
     }
 

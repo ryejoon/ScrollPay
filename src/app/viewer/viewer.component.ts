@@ -33,6 +33,7 @@ export class ViewerComponent implements OnInit {
       this.scrollpayStore.scrollpayItems$
         .pipe(map(arr => arr.find(item => item.txid === txid)))
         .subscribe(d => {
+          this.resetContentView();
           this.viewItem = d;
           if (d && d.preview) {
             this.renderLines(d.preview);
@@ -47,8 +48,16 @@ export class ViewerComponent implements OnInit {
       }
       console.log(this.viewItem);
       const nextHash = this.viewItem.chunkHashes.split(',')[c];
-      this.paidStore.getOrFetch(nextHash).then(r => this.renderLines(r));
+      this.paidStore.getOrFetch(this.viewItem.txid, nextHash).then(r => this.renderLines(r));
     });
+  }
+
+  private resetContentView() {
+    const contentElem = this.textContentElem.nativeElement;
+    while (contentElem.hasChildNodes()) {
+      contentElem.removeChild(contentElem.lastChild);
+    }
+    this.viewingChunk.next(0);
   }
 
   renderLines(content: string) {
@@ -61,6 +70,10 @@ export class ViewerComponent implements OnInit {
 
   onScroll() {
     if (this.isScrollBottom()) {
+      if (this.viewingChunk.value + 1 >= this.viewItem.chunkHashes.split(',').length) {
+        console.log('Bottom reached');
+        return;
+      }
       if (confirm('next page?')) {
         this.viewingChunk.next(this.viewingChunk.value + 1);
       }
