@@ -14,7 +14,7 @@ import {PaidStoreService} from '../service/paid-store.service';
           <h5>{{viewItem.description}}</h5>
       </div>
       <div class="text-content" #contentElem (scroll)="onScroll()"></div>
-
+        <mat-progress-bar mode="indeterminate" *ngIf="paidStore.isFetching"></mat-progress-bar>
   `,
   styles: ['h3 {text-align: center; width: 100%}', '.text-content {height: 100px;overflow: scroll}']
 })
@@ -33,7 +33,7 @@ export class ViewerComponent implements OnInit {
       this.scrollpayStore.scrollpayItems$
         .pipe(map(arr => arr.find(item => item.txid === txid)))
         .subscribe(d => {
-          this.resetContentView();
+          this.resetContent();
           this.viewItem = d;
           if (d && d.preview) {
             this.renderLines(d.preview);
@@ -52,7 +52,7 @@ export class ViewerComponent implements OnInit {
     });
   }
 
-  private resetContentView() {
+  private resetContent() {
     const contentElem = this.textContentElem.nativeElement;
     while (contentElem.hasChildNodes()) {
       contentElem.removeChild(contentElem.lastChild);
@@ -74,7 +74,7 @@ export class ViewerComponent implements OnInit {
         console.log('Bottom reached');
         return;
       }
-      if (confirm('next page?')) {
+      if (this.scrollpayStore.autoPay || confirm('next page?')) {
         this.viewingChunk.next(this.viewingChunk.value + 1);
       }
     }

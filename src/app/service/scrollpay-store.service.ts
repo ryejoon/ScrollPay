@@ -4,6 +4,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {ScrollpayItem} from './scrollpay/ScrollpayItem';
 import {map} from 'rxjs/operators';
 import {ScrollPayData, TxItem} from './response';
+import {UserOption} from './key-store.service';
 
 const ITEMS_PER_PAGE = 30;
 
@@ -12,6 +13,9 @@ const ITEMS_PER_PAGE = 30;
 })
 export class ScrollpayStoreService {
   private fetchedScrollpayItems$: BehaviorSubject<ScrollPayData[]> = new BehaviorSubject<ScrollPayData[]>([]);
+  private options: UserOption = {
+    autoPay: true
+  }
 
   constructor(private neonGenesis: NeonGenesisService) {
     // na paging for now
@@ -20,6 +24,10 @@ export class ScrollpayStoreService {
         const transformed = r.c.concat(r.u).map(tx => tx.pushdata).filter(data => this.isValid(data));
         this.fetchedScrollpayItems$.next(transformed);
       });
+  }
+
+  get autoPay(): boolean {
+    return this.options.autoPay;
   }
 
   get scrollpayItems$(): Observable<ScrollPayData[]> {

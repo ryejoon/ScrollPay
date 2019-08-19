@@ -11,6 +11,7 @@ import {ScrollpayStoreService} from './scrollpay-store.service';
 })
 export class PaidStoreService {
   private itemStore: FetchedItems = {};
+  private fetching = false;
 
   constructor(private http: HttpClient,
               private scorllpayStore: ScrollpayStoreService) { }
@@ -27,13 +28,18 @@ export class PaidStoreService {
     if (itemChunks[cHash]) {
       return itemChunks[cHash];
     }
+    this.fetching = true;
     return this.http.get(Hosts.cBitdbHost + cHash, {
       responseType: 'text'
     }).pipe(tap(r => {
       console.log(`Item ${itemKey} : cHash ${cHash} value cached: ${r}`);
       itemChunks[cHash] = r;
       return r;
-    })).toPromise();
+    })).toPromise().finally(() => this.fetching = false);
+  }
+
+  get isFetching(): boolean {
+    return this.fetching;
   }
 }
 
