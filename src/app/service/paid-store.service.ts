@@ -25,6 +25,7 @@ export class PaidStoreService {
       return;
     }
 
+
     if (!this.itemStore[itemKey]) {
       this.itemStore[itemKey] = {};
     }
@@ -36,7 +37,7 @@ export class PaidStoreService {
     return this.http.get(Hosts.cBitdbHost + cHash, {
       responseType: 'text'
     }).pipe(tap(r => {
-      console.log(`Item ${itemKey} : cHash ${cHash} value cached: ${r}`);
+      console.log(`Item ${itemKey} : cHash ${cHash} value cached`);
       itemChunks[cHash] = r;
       return r;
     })).toPromise().finally(() => this.fetching = false);

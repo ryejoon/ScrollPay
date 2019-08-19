@@ -7,6 +7,9 @@ import {BehaviorSubject} from 'rxjs';
 import {PaidStoreService} from '../service/paid-store.service';
 import * as CryptoJS from 'crypto-js';
 
+// skip preview
+const PAY_START_CHUNK = 1;
+
 @Component({
   selector: 'app-viewer',
   template: `
@@ -21,7 +24,7 @@ import * as CryptoJS from 'crypto-js';
 })
 export class ViewerComponent implements OnInit {
   @ViewChild('contentElem', {static: true}) textContentElem: ElementRef;
-  viewingChunk: BehaviorSubject<number> = new BehaviorSubject<number>(1);
+  viewingChunk: BehaviorSubject<number> = new BehaviorSubject<number>(PAY_START_CHUNK);
   viewItem: ScrollPayData;
   currentChunk: string;
 
@@ -29,7 +32,6 @@ export class ViewerComponent implements OnInit {
               private route: ActivatedRoute,
               private paidStore: PaidStoreService) { }
 
-  retryCount = 0;
   ngOnInit() {
     this.route.paramMap.subscribe(pm => {
       this.resetContent();
@@ -40,6 +42,7 @@ export class ViewerComponent implements OnInit {
           this.viewItem = d;
           if (d) {
             this.renderLines(d.preview);
+            this.currentChunk = d.preview;
           }
         });
     });
@@ -51,10 +54,12 @@ export class ViewerComponent implements OnInit {
       const chunkHashes = this.viewItem.chunkHashes.split(',');
       console.log(`Viewing chunk ${c} of ${chunkHashes.length}`);
       const nextHash = chunkHashes[c];
+      if (PAY_START_CHUNK > c) {
+        return;
+      }
       await this.paidStore.getOrFetch(this.viewItem, nextHash)
         .then(r => {
           this.currentChunk = r;
-          this.retryCount = 0;
           this.renderLines(r);
         }).catch(err => {
         console.log(err);

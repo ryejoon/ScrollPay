@@ -19,9 +19,15 @@ export class ScrollpayWriterService {
 
   payForChunk(scrollpayItem: ScrollPayData, cHash: string): Observable<any> {
     if (!this.keyStore.key) {
-      console.log(`No private key set`);
+      alert(`Please Login with your private Key to view the content`);
       return EMPTY;
     }
+    this.balanceStore.getBalance$(this.keyStore.address).subscribe(b => {
+      const estimatedFee = parseInt(scrollpayItem.price, 100) + 500;
+      if (b < estimatedFee) {
+        alert(`Insufficient Balance(${b}). Estimated fee: ${estimatedFee}`);
+      }
+    });
     const chunkIndex = scrollpayItem.chunkHashes.split(',').indexOf(cHash);
     const data = [
       Const.SPLIT_PROTOCOL,
@@ -46,7 +52,7 @@ export class ScrollpayWriterService {
     console.log(tx);
 
     return new Observable(subscriber => {
-      setTimeout(() => subscriber.error('Payment Timeout'), 5000);
+      setTimeout(() => subscriber.error('Payment Timeout'), 10000);
       datapay.send(tx, (err, res) => {
         if (err) {
           subscriber.error(err);

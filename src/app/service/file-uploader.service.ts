@@ -53,7 +53,7 @@ export class FileUploaderService {
           }
 
           return new Observable(subscriber => {
-            setTimeout(() => subscriber.error('Payment Timeout'), 5000);
+            setTimeout(() => subscriber.error('Payment Timeout'), 10000);
             datapay.send(tx, (err, res) => {
               if (err) {
                 subscriber.error(err);
