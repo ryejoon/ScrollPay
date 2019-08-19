@@ -48,7 +48,7 @@ export class ViewerComponent implements OnInit {
       }
       console.log(this.viewItem);
       const nextHash = this.viewItem.chunkHashes.split(',')[c];
-      this.paidStore.getOrFetch(this.viewItem.txid, nextHash).then(r => this.renderLines(r));
+      this.paidStore.getOrFetch(this.viewItem, nextHash).then(r => this.renderLines(r));
     });
   }
 

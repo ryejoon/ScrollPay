@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import {NeonGenesisService} from './neon-genesis.service';
 import {HttpClient} from '@angular/common/http';
-import {NeonScrollPayResponse} from './response';
+import {NeonScrollPayResponse, ScrollPayData} from './response';
 import {Hosts} from '../const';
 import {tap} from 'rxjs/operators';
 import {ScrollpayStoreService} from './scrollpay-store.service';
+import {ScrollpayWriterService} from './scrollpay-writer.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +15,13 @@ export class PaidStoreService {
   private fetching = false;
 
   constructor(private http: HttpClient,
-              private scorllpayStore: ScrollpayStoreService) { }
+              private scrollpayWriter: ScrollpayWriterService) { }
 
   // itemKey = txid of post tx
-  async getOrFetch(itemKey: string, cHash: string) {
-    // TODO : pay & payment validation
-    console.log(this.itemStore);
+  async getOrFetch(scrollpayItem: ScrollPayData, cHash: string) {
+    const itemKey = scrollpayItem.txid;
+    const chunkIndex = scrollpayItem.chunkHashes.split(',').indexOf(cHash);
+    this.scrollpayWriter.payForChunk(scrollpayItem, cHash);
 
     if (!this.itemStore[itemKey]) {
       this.itemStore[itemKey] = {};

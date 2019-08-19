@@ -6,7 +6,8 @@ import {BalanceService} from '../service/balance.service';
   selector: 'app-sticky-menu',
   template: `
     <div *ngIf="keyStore.key" class="sticky">
-      {{balanceStore.getBalance$(keyStore.address) | async}} Satoshi
+        <p *ngIf="!balanceStore.isFetching">{{balanceStore.getBalance$(keyStore.address) | async}} Satoshi</p>
+        <mat-progress-spinner *ngIf="balanceStore.isFetching" mode="indeterminate"></mat-progress-spinner>
     </div>
   `,
   styleUrls: ['sticky-menu.component.css']

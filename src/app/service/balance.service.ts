@@ -8,7 +8,12 @@ import {filter, first, map} from 'rxjs/operators';
 })
 export class BalanceService {
   private addressInfo: {[address: string]: BehaviorSubject<any>} = {};
+  private fetching = false;
   constructor(private bitindex: BitindexService) { }
+
+  get isFetching() {
+    return this.fetching;
+  }
 
   getBalance$(address: string) {
     return this.getAddressInfo(address)
@@ -25,13 +30,17 @@ export class BalanceService {
   }
 
   refreshAddressInfo(address: string) {
+    this.fetching = true;
     if (!this.addressInfo[address]) {
       this.getAddressInfo(address)
-        .subscribe(r => {});
+        .subscribe(r => this.fetching = false);
     } else {
       this.bitindex.getObservable(address)
         .pipe(first())
-        .subscribe(r => this.addressInfo[address].next(r));
+        .subscribe(r => {
+          this.addressInfo[address].next(r);
+          this.fetching = false;
+        });
     }
   }
 }
