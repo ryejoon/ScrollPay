@@ -25,7 +25,8 @@ import {ScrollpayWriterService} from '../service/scrollpay-writer.service';
                          [ngModelOptions]="{standalone: true}">
               </mat-form-field>
               <form fxLayout="column">
-                  <input #textFileInput type="file" (change)="setInputFile(textFileInput)"/>
+                  <label>Select .txt file to publish : <input #textFileInput type="file" accept=".txt"
+                                                              (change)="setInputFile(textFileInput)"/></label>
                   <mat-form-field>
                       <input matInput [(ngModel)]="payToAddress" placeholder="Your address to get paid" size="500"
                              [ngModelOptions]="{standalone: true}">
