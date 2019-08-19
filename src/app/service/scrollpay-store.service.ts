@@ -14,11 +14,9 @@ export class ScrollpayStoreService {
   private fetchedScrollpayItems$: BehaviorSubject<ScrollPayData[]> = new BehaviorSubject<ScrollPayData[]>([]);
 
   constructor(private neonGenesis: NeonGenesisService) {
-    console.log('on init');
     // na paging for now
     this.neonGenesis.getScrollPayItems(0, 100)
       .subscribe(r => {
-        console.log(r);
         const transformed = r.c.concat(r.u).map(tx => tx.pushdata).filter(data => this.isValid(data));
         this.fetchedScrollpayItems$.next(transformed);
       });
@@ -31,7 +29,6 @@ export class ScrollpayStoreService {
   isValid(data: ScrollPayData) {
     const emptyProperty = Object.keys(data).find(k => {
       if (!data[k]) {
-        console.log(k + ':' + JSON.stringify(data));
         return k;
       }
     });
