@@ -23,14 +23,14 @@ import {ScrollpayWriterService} from '../service/scrollpay-writer.service';
                   <input matInput [(ngModel)]="item.description" placeholder="Description" [maxLength]="1000"
                          [ngModelOptions]="{standalone: true}">
               </mat-form-field>
-              <form>
+              <form fxLayout="column">
                   <input #textFileInput type="file" (change)="setInputFile(textFileInput)"/>
                   <mat-form-field>
-                      <input matInput [(ngModel)]="payToAddress" placeholder="Your address to get paid"
+                      <input matInput [(ngModel)]="payToAddress" placeholder="Your address to get paid" size="500"
                              [ngModelOptions]="{standalone: true}">
                   </mat-form-field>
                   <mat-form-field>
-                      <input matInput [(ngModel)]="priceSum" type="number" placeholder="Price to view all the contents"
+                      <input matInput [(ngModel)]="priceSum" type="number" placeholder="Price to view all the contents (satoshi)"
                              [ngModelOptions]="{standalone: true}">
                   </mat-form-field>
                   <mat-form-field>

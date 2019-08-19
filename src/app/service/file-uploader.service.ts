@@ -1,11 +1,9 @@
 /* tslint:disable:object-literal-shorthand */
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Const, Hosts} from '../const';
 import {KeyStoreService} from './key-store.service';
 import * as CryptoJS from 'crypto-js';
 import {HttpClient} from '@angular/common/http';
-import {ScrollpayItem} from './scrollpay/ScrollpayItem';
-import {SplitPayOption} from './split/SplitPayOption';
 import {EMPTY, Observable} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 

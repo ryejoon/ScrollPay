@@ -5,7 +5,7 @@ import {ScrollpayStoreService} from '../service/scrollpay-store.service';
 @Component({
   selector: 'app-explore',
   template: `
-      <div fxLayout="row">
+      <div fxLayout="row" fxLayoutAlign="center">
           <div fxFlex="20">
               <ng-container *ngIf="scrollpayStore.scrollpayItems$ | async as items">
                   <mat-nav-list>
@@ -13,7 +13,9 @@ import {ScrollpayStoreService} from '../service/scrollpay-store.service';
                   </mat-nav-list>
               </ng-container>
           </div>
-          <router-outlet></router-outlet>
+          <div fxFlex="80">
+              <router-outlet></router-outlet>
+          </div>
       </div>
   `,
   styles: ['']

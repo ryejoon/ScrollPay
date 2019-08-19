@@ -14,5 +14,4 @@ import { Component } from '@angular/core';
   styles: ['mat-toolbar {background-color: antiquewhite}']
 })
 export class AppComponent {
-  title = 'split-viewer';
 }

@@ -11,18 +11,17 @@ import * as CryptoJS from 'crypto-js';
   selector: 'app-viewer',
   template: `
       <div *ngIf="viewItem" fxLayout="column">
-          <h3>{{viewItem.title}}</h3>
-          <h4>{{viewItem.description}}</h4>
-          <h6>{{viewItem.preview}}</h6>
+          <h1>{{viewItem.title}}</h1>
+          <h2>{{viewItem.description}}</h2>
       </div>
       <div class="text-content" #contentElem (scroll)="onScroll()"></div>
       <mat-progress-bar mode="indeterminate" *ngIf="paidStore.isFetching"></mat-progress-bar>
   `,
-  styles: ['h3 {text-align: center; width: 100%}', '.text-content {height: 100px;overflow: scroll}']
+  styles: ['h3 {text-align: center; width: 100%}', '.text-content {height: 500px;overflow: scroll}']
 })
 export class ViewerComponent implements OnInit {
   @ViewChild('contentElem', {static: true}) textContentElem: ElementRef;
-  viewingChunk: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  viewingChunk: BehaviorSubject<number> = new BehaviorSubject<number>(1);
   viewItem: ScrollPayData;
   currentChunk: string;
 
@@ -37,7 +36,12 @@ export class ViewerComponent implements OnInit {
       const txid = pm.get('txid');
       this.scrollpayStore.scrollpayItems$
         .pipe(map(arr => arr.find(item => item.txid === txid)))
-        .subscribe(d => this.viewItem = d);
+        .subscribe(d => {
+          this.viewItem = d;
+          if (d) {
+            this.renderLines(d.preview);
+          }
+        });
     });
 
     this.viewingChunk.subscribe(async c => {
