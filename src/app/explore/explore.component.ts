@@ -7,11 +7,11 @@ import {ScrollpayStoreService} from '../service/scrollpay-store.service';
   template: `
       <div fxLayout="row">
           <div fxFlex="20">
-              <div *ngIf="scrollpayStore.scrollpayItems$ | async as items">
-                  <div *ngFor="let item of items" [routerLink]="[item.txid]">
-                      {{item.title}}
-                  </div>
-              </div>
+              <ng-container *ngIf="scrollpayStore.scrollpayItems$ | async as items">
+                  <mat-nav-list>
+                      <mat-list-item  *ngFor="let item of items" [routerLink]="[item.txid]">{{item.title}}</mat-list-item>
+                  </mat-nav-list>
+              </ng-container>
           </div>
           <router-outlet></router-outlet>
       </div>

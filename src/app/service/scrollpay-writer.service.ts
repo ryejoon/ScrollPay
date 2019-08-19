@@ -4,7 +4,7 @@ import {KeyStoreService} from './key-store.service';
 import {ScrollPayData} from './response';
 import {Const} from '../const';
 import {BalanceService} from './balance.service';
-import {Observable} from 'rxjs';
+import {EMPTY, Observable} from 'rxjs';
 import {ScrollpayItem} from './scrollpay/ScrollpayItem';
 import {SplitPayOption} from './split/SplitPayOption';
 
@@ -19,7 +19,8 @@ export class ScrollpayWriterService {
 
   payForChunk(scrollpayItem: ScrollPayData, cHash: string): Observable<any> {
     if (!this.keyStore.key) {
-      throw Error(`No private key set`);
+      console.log(`No private key set`);
+      return EMPTY;
     }
     const chunkIndex = scrollpayItem.chunkHashes.split(',').indexOf(cHash);
     const data = [

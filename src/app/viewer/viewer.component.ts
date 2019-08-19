@@ -5,6 +5,7 @@ import {ScrollPayData} from '../service/response';
 import {map} from 'rxjs/operators';
 import {BehaviorSubject} from 'rxjs';
 import {PaidStoreService} from '../service/paid-store.service';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-viewer',
@@ -23,6 +24,7 @@ export class ViewerComponent implements OnInit {
   @ViewChild('contentElem', {static: true}) textContentElem: ElementRef;
   viewingChunk: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   viewItem: ScrollPayData;
+  currentChunk: string;
 
   constructor(private scrollpayStore: ScrollpayStoreService,
               private route: ActivatedRoute,
@@ -35,37 +37,23 @@ export class ViewerComponent implements OnInit {
       const txid = pm.get('txid');
       this.scrollpayStore.scrollpayItems$
         .pipe(map(arr => arr.find(item => item.txid === txid)))
-        .subscribe(d => {
-          this.viewItem = d;
-          /*if (d && d.preview) {
-            this.renderLines(d.preview);
-          }*/
-          //this.onScroll();
-        });
+        .subscribe(d => this.viewItem = d);
     });
 
-    this.viewingChunk.subscribe(c => {
+    this.viewingChunk.subscribe(async c => {
       if (!this.viewItem) {
         return;
       }
-      console.log(`Viewing chunk ${c}`);
-      const nextHash = this.viewItem.chunkHashes.split(',')[c];
-      this.paidStore.getOrFetch(this.viewItem, nextHash)
+      const chunkHashes = this.viewItem.chunkHashes.split(',');
+      console.log(`Viewing chunk ${c} of ${chunkHashes.length}`);
+      const nextHash = chunkHashes[c];
+      await this.paidStore.getOrFetch(this.viewItem, nextHash)
         .then(r => {
+          this.currentChunk = r;
           this.retryCount = 0;
           this.renderLines(r);
-          if (this.isScrollBottom()) {
-            setTimeout(() => this.onScroll(), 1000);
-          }
         }).catch(err => {
         console.log(err);
-        if (this.retryCount <= 3) {
-          console.log(`Retrying...`);
-          this.retryCount = this.retryCount + 1;
-          setTimeout(() => this.viewingChunk.next(c), 500);
-        } else {
-          alert(`Max Retry Count reached. Unable to fetch chunk data. Please try again later`);
-        }
       });
     });
   }
@@ -76,6 +64,7 @@ export class ViewerComponent implements OnInit {
       contentElem.removeChild(contentElem.lastChild);
     }
     this.viewingChunk.next(0);
+    this.viewItem = null;
   }
 
   renderLines(content: string) {
@@ -88,12 +77,21 @@ export class ViewerComponent implements OnInit {
 
   onScroll() {
     if (this.isScrollBottom()) {
-      if (this.viewingChunk.value + 1 >= this.viewItem.chunkHashes.split(',').length) {
+      const viewingChunk = this.viewingChunk.value;
+      const chunkHashes = this.viewItem.chunkHashes.split(',');
+      if (viewingChunk + 1 >= chunkHashes.length) {
         console.log('Bottom reached');
         return;
       }
       if (this.scrollpayStore.autoPay || confirm('next page?')) {
-        this.viewingChunk.next(this.viewingChunk.value + 1);
+        const renderedChunk = chunkHashes.indexOf(CryptoJS.SHA256(this.currentChunk).toString());
+        console.log(`Rendered : ${renderedChunk}, Viewing: ${viewingChunk}`);
+        if (renderedChunk !== viewingChunk) {
+          console.log(`Retrying chunk ${viewingChunk}`);
+          this.viewingChunk.next(viewingChunk);
+        } else {
+          this.viewingChunk.next(viewingChunk + 1);
+        }
       }
     }
   }

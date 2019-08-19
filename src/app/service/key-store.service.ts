@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import bsv from 'bsv';
+import {BehaviorSubject} from 'rxjs';
 
 export interface UserKey {
   privateKey: any;
@@ -12,45 +13,48 @@ export interface UserKey {
 })
 export class KeyStoreService {
   // tslint:disable-next-line:variable-name
-  private _key: UserKey;
+  private userKey: BehaviorSubject<UserKey> = new BehaviorSubject<UserKey>(null);
 
   constructor() { }
 
   get key(): UserKey {
-    return this._key;
+    return this.userKey.value;
+  }
+
+  get userKey$() {
+    return this.userKey.asObservable();
   }
 
   get privateKey(): string {
-    if (!this._key) {
+    if (!this.userKey.value) {
       return null;
     }
-    return this._key.privateKey.toWIF();
+    return this.userKey.value.privateKey.toWIF();
   }
 
   get address(): string {
-    if (!this._key) {
+    if (!this.userKey.value) {
       return null;
     }
-    return this._key.address.toString();
+    return this.userKey.value.address.toString();
   }
 
   public newUserKey() {
     const privk = bsv.PrivateKey.fromRandom();
-    this._key = {
+    this.userKey.next({
       privateKey: privk,
       publicKey: bsv.PublicKey.fromPrivateKey(privk),
       address: bsv.Address.fromPrivateKey(privk)
-    };
+    });
   }
 
   public importKey(privateKeyString: string) {
     const privk = bsv.PrivateKey.fromWIF(privateKeyString);
-    console.log(privk);
-    this._key = {
+    this.userKey.next({
       privateKey: privk,
       publicKey: bsv.PublicKey.fromPrivateKey(privk),
       address: bsv.Address.fromPrivateKey(privk)
-    };
+    });
   }
 }
 

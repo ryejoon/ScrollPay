@@ -21,7 +21,6 @@ declare var moneyButton: any;
               <mat-progress-spinner *ngIf="rendering" mode="indeterminate"></mat-progress-spinner>
           </div>
       </div>
-      <div #moneyButtonElem></div>
 
   `,
   styles: ['.errorMessage { color: red}']
@@ -29,8 +28,6 @@ declare var moneyButton: any;
 export class LoginComponent implements OnInit {
 
   constructor(private keyStore: KeyStoreService, private balanceService: BalanceService) { }
-
-  @ViewChild('moneyButtonElem', {static: true}) moneyButtonElem: ElementRef;
   importedKey: string;
   errorMessage: string;
   rendering: boolean;
@@ -40,45 +37,13 @@ export class LoginComponent implements OnInit {
 
   createKey() {
     this.keyStore.newUserKey();
-    this.renderMoneyButton(this.keyStore.address);
   }
 
   importKey() {
     try {
       this.keyStore.importKey(this.importedKey);
-      this.renderMoneyButton(this.keyStore.address);
     } catch (err) {
       this.errorMessage = err.message;
     }
-  }
-
-  private renderMoneyButton(address) {
-    console.log(`${address}, ${this.moneyButtonElem}`);
-    if (!this.moneyButtonElem) {
-      return;
-    }
-    this.rendering = true;
-    setTimeout(() => this.rendering = false, 2000);
-
-    moneyButton.render(this.moneyButtonElem.nativeElement, {
-      to: address,
-      amount: '0.01',
-      currency: 'USD',
-      label: 'Fund Address',
-      type: 'tip',
-      onPayment: (arg) => {
-        this.rendering = true;
-        console.log('onPayment', arg);
-        setTimeout(() => {
-          this.balanceService.refreshAddressInfo(address);
-          setTimeout(() => {
-            this.rendering = false;
-          }, 2000);
-        }, 2000);
-      },
-      onError: (arg) => {
-        console.log('onError', arg);
-      }
-    });
   }
 }

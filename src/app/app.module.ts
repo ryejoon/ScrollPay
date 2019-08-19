@@ -6,7 +6,14 @@ import { AppComponent } from './app.component';
 import { ExploreComponent } from './explore/explore.component';
 import { TextUploadComponent } from './upload/text-upload.component';
 import { ViewerComponent } from './viewer/viewer.component';
-import {MatButtonModule, MatInputModule, MatProgressBarModule, MatProgressSpinnerModule, MatToolbarModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatInputModule,
+  MatListModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatToolbarModule
+} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule} from '@angular/forms';
 import { LoginComponent } from './login/login.component';
@@ -34,7 +41,8 @@ import { StickyMenuComponent } from './sticky-menu/sticky-menu.component';
     MatButtonModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
-    MatInputModule
+    MatInputModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
