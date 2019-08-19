@@ -14,6 +14,7 @@ import {ScrollpayWriterService} from '../service/scrollpay-writer.service';
   selector: 'app-upload',
   template: `
       <div fxLayout="column" fxLayoutAlign="start center">
+          <p class="warn" *ngIf="(keyStore.userKey$ | async) === null">Please login to upload text data.</p>
           <div fxLayout="column" fxLayoutAlign="start">
               <mat-form-field>
                   <input matInput [(ngModel)]="item.title" placeholder="Title" required [maxLength]="500"
@@ -36,10 +37,13 @@ import {ScrollpayWriterService} from '../service/scrollpay-writer.service';
                   <mat-form-field>
                       <input matInput [(ngModel)]="textSplitOption.chunks" type="number" placeholder="Number of chunks"
                              [ngModelOptions]="{standalone: true}">
-                      <button mat-stroked-button (click)="apply()">Apply Chunk</button>
+                      <button mat-stroked-button (click)="apply()"
+                              [disabled]="(keyStore.userKey$ | async) === null">Apply Chunk</button>
                   </mat-form-field>
               </form>
-              <button mat-stroked-button (click)="publishItem()">Publish</button>
+              <button mat-stroked-button (click)="publishItem()"
+                      [disabled]="(keyStore.userKey$ | async) === null">Publish</button>
+              <mat-progress-bar mode="indeterminate" *ngIf="publishing"></mat-progress-bar>
           </div>
           <div *ngIf="splitContent" #textContentElem fxLayout="column">
               <div *ngFor="let chunk of splitContent.chunks" fxLayout="row">
@@ -53,13 +57,13 @@ import {ScrollpayWriterService} from '../service/scrollpay-writer.service';
           </div>
       </div>
   `,
-  styles: ['.preview {color: forestgreen}', 'textarea {width: 500px;height: 200px}', 'input {width: 500px}']
+  styles: ['.warn {color: forestgreen}','.preview {color: forestgreen}', 'textarea {width: 500px;height: 200px}', 'input {width: 500px}']
 })
 export class TextUploadComponent implements OnInit {
   @ViewChild('textContentElem', {static: true}) textContentElem: ElementRef;
   payToAddress: string = this.keyStore.address;
   textSplitOption: TextSplitOption = {
-    chunks: 100
+    chunks: 10
   };
 
   item: ScrollpayItem<string> = {
@@ -72,6 +76,7 @@ export class TextUploadComponent implements OnInit {
   priceSum: number;
   splitContent: SplitContent<string, string>;
   fileContent: any;
+  publishing: boolean;
 
   constructor(private keyStore: KeyStoreService,
               private imageService: ImageService,
@@ -122,10 +127,23 @@ export class TextUploadComponent implements OnInit {
   }
 
   async publishItem() {
+    this.publishing = true;
     const hashes = this.splitContent.chunks.map(c => CryptoJS.SHA256(c).toString());
     this.item.chunkSha256Hashes = hashes;
     console.log(hashes);
-    await Promise.all(this.splitContent.chunks.map(c => this.fileUploader.buildTextFileTx(c).toPromise()));
+
+    const uploadChunkPromises = this.splitContent.chunks.map(c => this.fileUploader.buildTextFileTx(c).toPromise());
+
+    const result = await this.runInSequence(uploadChunkPromises)
+      .catch((err) => {
+        alert(`Failed to upload chunks. Please try again later with same configuration : ` + err.message);
+      });
+    if (!result) {
+      this.publishing = false;
+      return;
+    }
+    console.log('Promise Result');
+    console.log(result);
     const scrollPay: ScrollpayItem<string> = {
       title: this.item.title,
       description: this.item.description,
@@ -142,5 +160,14 @@ export class TextUploadComponent implements OnInit {
       price: Math.floor((this.priceSum) / (this.textSplitOption.chunks))
     };
     this.scrollPayWriter.sendScrollpayProtocolTx(scrollPay, splitConfig);
+    this.publishing = false;
+  }
+
+  async runInSequence(promises) {
+    const results = [];
+    for (const prom of promises) {
+      results.push(await prom);
+    }
+    return results;
   }
 }

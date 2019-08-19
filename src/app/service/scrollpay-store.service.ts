@@ -1,9 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {NeonGenesisService} from './neon-genesis.service';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {ScrollpayItem} from './scrollpay/ScrollpayItem';
-import {map} from 'rxjs/operators';
-import {ScrollPayData, TxItem} from './response';
+import {ScrollPayData} from './response';
 import {UserOption} from './key-store.service';
 
 const ITEMS_PER_PAGE = 30;
@@ -16,13 +14,16 @@ export class ScrollpayStoreService {
   private options: UserOption = {
     autoPay: true
   }
+  fetching = false;
 
   constructor(private neonGenesis: NeonGenesisService) {
     // na paging for now
+    this.fetching = true;
     this.neonGenesis.getScrollPayItems(0, 100)
       .subscribe(r => {
         const transformed = r.c.concat(r.u).map(tx => tx.pushdata).filter(data => this.isValid(data));
         this.fetchedScrollpayItems$.next(transformed);
+        this.fetching = false;
       });
   }
 

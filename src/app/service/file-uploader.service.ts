@@ -31,7 +31,7 @@ export class FileUploaderService {
             console.log(`Already uploaded : ${cHash}`);
             return EMPTY;
           }
-          console.log(`CHash : ${cHash}, Content: ${content}`);
+          console.log(`Trying to upload CHash : ${cHash}`);
 
           const data = [
             Const.B_PROTOCOL,
@@ -39,8 +39,6 @@ export class FileUploaderService {
             'text/plain',
             'utf-8'
           ];
-
-          console.log(`Payload : ${data}`);
 
           const tx = {
             safe: true,

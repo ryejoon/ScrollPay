@@ -5,13 +5,13 @@ import { Component } from '@angular/core';
   template: `
       <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
           <div class="toolbar-menu" [routerLink]="['explore']">Explore</div>
-          <h2 [routerLink]="['']">Welcome to ScrollPay!</h2>
+          <img src="./assets/scrollpay.png" [routerLink]="['']">
           <div class="toolbar-menu" [routerLink]="['upload']">Upload</div>
       </mat-toolbar>
       <router-outlet></router-outlet>
         <app-sticky-menu></app-sticky-menu>
   `,
-  styles: ['mat-toolbar {background-color: antiquewhite}']
+  styles: ['img {height: 100%}', '*:focus { outline: none !important; }']
 })
 export class AppComponent {
 }

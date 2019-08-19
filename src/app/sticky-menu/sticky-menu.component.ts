@@ -8,7 +8,7 @@ declare var moneyButton: any;
   selector: 'app-sticky-menu',
   template: `
     <div *ngIf="keyStore.key" class="sticky">
-        <p *ngIf="!balanceStore.isFetching">{{balanceStore.getBalance$(keyStore.address) | async}} Satoshi</p>
+        <p *ngIf="!balanceStore.isFetching">Balance {{balanceStore.getBalance$(keyStore.address) | async}} Satoshi</p>
         <mat-progress-spinner *ngIf="balanceStore.isFetching" mode="indeterminate"></mat-progress-spinner>
         <div id="sicky-moneybutton" #moneyButtonElem></div>
     </div>
@@ -33,7 +33,7 @@ export class StickyMenuComponent implements OnInit {
       to: address,
       amount: '0.1',
       currency: 'USD',
-      label: 'Fund Address',
+      label: 'Pay to Read',
       type: 'tip',
       onPayment: (arg) => {
         console.log('onPayment', arg);

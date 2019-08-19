@@ -5,6 +5,7 @@ import {ScrollpayStoreService} from '../service/scrollpay-store.service';
 @Component({
   selector: 'app-explore',
   template: `
+    <mat-progress-bar mode="indeterminate" *ngIf="scrollpayStore.fetching"></mat-progress-bar>
       <div fxLayout="row" fxLayoutAlign="center">
           <div fxFlex="20">
               <ng-container *ngIf="scrollpayStore.scrollpayItems$ | async as items">

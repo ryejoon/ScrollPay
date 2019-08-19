@@ -58,6 +58,10 @@ export class PaidStoreService {
   async getOrFetch(scrollpayItem: ScrollPayData, cHash: string) {
     const itemKey = scrollpayItem.txid;
     const chunkIndex = scrollpayItem.chunkHashes.split(',').indexOf(cHash);
+    if (!this.keyStore.key) {
+      alert(`Please login with your private key`);
+      return;
+    }
 
     if (this.paymentStore[itemKey].has(chunkIndex)) {
       console.log(`Already purchased chunk ${chunkIndex} from item ${itemKey}`);

@@ -19,9 +19,10 @@ const PAY_START_CHUNK = 1;
           <p>You have purchased {{paidStore.getPaidChunksCount(viewItem.txid)}} out of {{getChunkSize()}}</p>
       </div>
       <div class="text-content" #contentElem (scroll)="onScroll()"></div>
+      <button mat-stroked-button *ngIf="isContentSmallerThanView()" (click)="onScroll(true)">Load More</button>
       <mat-progress-bar mode="indeterminate" *ngIf="paidStore.isFetching"></mat-progress-bar>
   `,
-  styles: ['h3 {text-align: center; width: 100%}', '.text-content {height: 500px;overflow: scroll}']
+  styles: ['h3 {text-align: center; width: 100%}', '.text-content {max-height: 500px;overflow: scroll}']
 })
 export class ViewerComponent implements OnInit {
   @ViewChild('contentElem', {static: true}) textContentElem: ElementRef;
@@ -60,12 +61,19 @@ export class ViewerComponent implements OnInit {
       }
       await this.paidStore.getOrFetch(this.viewItem, nextHash)
         .then(r => {
-          this.currentChunk = r;
-          this.renderLines(r);
+          if (r) {
+            this.currentChunk = r;
+            this.renderLines(r);
+          }
         }).catch(err => {
-        console.log(err);
+          alert(`Unable to get the next page. Please Try Again :` + err.message);
+          console.log(err);
       });
     });
+  }
+
+  isContentSmallerThanView() {
+    return this.textContentElem.nativeElement.clientHeight < 500;
   }
 
   private resetContent() {
@@ -85,8 +93,8 @@ export class ViewerComponent implements OnInit {
     });
   }
 
-  onScroll() {
-    if (this.isScrollBottom()) {
+  onScroll(forceNext?: boolean) {
+    if (this.isScrollBottom() || forceNext) {
       const viewingChunk = this.viewingChunk.value;
       const chunkHashes = this.viewItem.chunkHashes.split(',');
       if (viewingChunk + 1 >= chunkHashes.length) {

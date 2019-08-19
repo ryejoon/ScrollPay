@@ -1,10 +1,11 @@
 {
-  "name": "split-viewer",
+  "name": "scroll-pay",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod-ghp": "ng build --prod --base-href 'https://ryejoon.github.io/ScrollPay/' && ngh --dir ./dist/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

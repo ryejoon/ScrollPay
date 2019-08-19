@@ -29,7 +29,7 @@ export class NeonGenesisService {
         },
         skip: skip,
         limit: limit,
-        sort: { 'blk.i': 1 }
+        sort: { 'blk.i': -1 }
       },
       r: {
         f: '[.[] | { order: .i, txid: .tx.h, block: .blk, pushdata: ' +
