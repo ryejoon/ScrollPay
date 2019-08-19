@@ -18,7 +18,7 @@ declare var moneyButton: any;
 export class StickyMenuComponent implements OnInit {
   @ViewChild('moneyButtonElem', {static: false}) moneyButtonElem: ElementRef;
 
-  constructor(private keyStore: KeyStoreService, private balanceStore: BalanceService) { }
+  constructor(public keyStore: KeyStoreService, public balanceStore: BalanceService) { }
 
   ngOnInit() {
     this.keyStore.userKey$.subscribe(uk => {

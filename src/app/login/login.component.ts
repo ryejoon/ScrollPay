@@ -28,7 +28,7 @@ declare var moneyButton: any;
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private keyStore: KeyStoreService) { }
+  constructor(public keyStore: KeyStoreService) { }
   importedKey: string;
   errorMessage: string;
 

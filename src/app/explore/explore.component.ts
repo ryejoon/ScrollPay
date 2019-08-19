@@ -23,7 +23,7 @@ import {ScrollpayStoreService} from '../service/scrollpay-store.service';
 })
 export class ExploreComponent implements OnInit {
 
-  constructor(private scrollpayStore: ScrollpayStoreService) { }
+  constructor(public scrollpayStore: ScrollpayStoreService) { }
 
   ngOnInit() {
   }

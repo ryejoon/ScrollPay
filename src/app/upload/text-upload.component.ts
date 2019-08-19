@@ -57,7 +57,7 @@ import {ScrollpayWriterService} from '../service/scrollpay-writer.service';
           </div>
       </div>
   `,
-  styles: ['.warn {color: forestgreen}','.preview {color: forestgreen}', 'textarea {width: 500px;height: 200px}', 'input {width: 500px}']
+  styles: ['.warn {color: forestgreen}', '.preview {color: forestgreen}', 'textarea {width: 500px;height: 200px}', 'input {width: 500px}']
 })
 export class TextUploadComponent implements OnInit {
   @ViewChild('textContentElem', {static: true}) textContentElem: ElementRef;
@@ -78,11 +78,11 @@ export class TextUploadComponent implements OnInit {
   fileContent: any;
   publishing: boolean;
 
-  constructor(private keyStore: KeyStoreService,
-              private imageService: ImageService,
-              private textSplitter: TextSplitterService,
-              private fileUploader: FileUploaderService,
-              private scrollPayWriter: ScrollpayWriterService) { }
+  constructor(public keyStore: KeyStoreService,
+              public imageService: ImageService,
+              public textSplitter: TextSplitterService,
+              public fileUploader: FileUploaderService,
+              public scrollPayWriter: ScrollpayWriterService) { }
 
   ngOnInit() {
   }

@@ -30,9 +30,9 @@ export class ViewerComponent implements OnInit {
   viewItem: ScrollPayData;
   currentChunk: string;
 
-  constructor(private scrollpayStore: ScrollpayStoreService,
-              private route: ActivatedRoute,
-              private paidStore: PaidStoreService) { }
+  constructor(public scrollpayStore: ScrollpayStoreService,
+              public route: ActivatedRoute,
+              public paidStore: PaidStoreService) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(pm => {

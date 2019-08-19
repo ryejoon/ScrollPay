@@ -8,7 +8,8 @@
     "build:prod-ghp": "ng build --prod --base-href 'https://ryejoon.github.io/ScrollPay/' && ngh --dir ./dist/",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "node patch.js"
   },
   "private": true,
   "dependencies": {
