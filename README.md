@@ -7,10 +7,13 @@
  ScrollPay application runs on two protocols-of its own, and SplitPay. 
  
 ### ScrollPay Protocol
- Bitcom prefix `1FGbDFzz3Ke6x8dM3TfaSoGRfx1z3BEUkB`. A simple application-specific protocol that indicates the title, description, preview, and most importantly, the C hashes of the chunks of the text. The collection and the ordering of the hashes is very important, and should be kept secure(via encryption, server side storage, etc). The current implimentation had this limitation as to focus on the payment.
+ Bitcom prefix `1FGbDFzz3Ke6x8dM3TfaSoGRfx1z3BEUkB`. A simple application-specific protocol that indicates the title, description, preview, and most importantly, the [C://](https://c.bitdb.network) hashes of the chunks of the text. The collection and the ordering of the hashes is very important, and should be kept secure(via encryption, server side storage, etc). The current implimentation had this limitation as to focus on the payment.
 ```
-OP_RETURN 1FGbDFzz3Ke6x8dM3TfaSoGRfx1z3BEUkB [title] [description] [preview] [C hashs of the chunks]
+OP_RETURN 1FGbDFzz3Ke6x8dM3TfaSoGRfx1z3BEUkB [title] [description] [preview] [sha256 hashes of the chunks]
 ```
+
+ [This](https://whatsonchain.com/tx/ea31c42152a6a6fd1a97d4f22e7242f4efa942a439be2564b6bd7c533a3d9f64) is an example for `애국가` item. [This](https://whatsonchain.com/tx/0a67ddce2c7381719c56ee9549059712dccfc1da537653b6198422a6f9523b4b) is an example OP_RETURN of `Alice’s Adventures in Wonderland`. 
+ 
 
 ### SplitPay Protocol
  Bitcom prefix `1MUm6vjuA7BF3VLmgUpRPywiKD69w4TUjA`. A general protocol to indicate the publish/purchase of a chunk of an item. 
@@ -23,14 +26,17 @@ OP_RETURN [Any Protocol] |
 ```
 
 #### Buy
- Indicates a payment to an item, with the actual payment output in the same transaction. The both outputs have to be in the same transaction.
-
-##### OP_RETURN Output
+ Indicates a payment to an item, with the actual payment output in the same transaction. The both outputs must be in the same transaction.
 ```
+output1 
 OP_RETURN 1MUm6vjuA7BF3VLmgUpRPywiKD69w4TUjA [item txid] [from] [until]
-```
-##### Payment Output
-```
+
+output2
 Amount : (price * ((until - from) / price unit))
 Address : [pay-to-address] of the sell tx.
 ```
+
+
+
+#### Samples
+- [Scrollpay OP_RETURNs ](https://babel.bitdb.network/query/1DHDifPvtPgKFPZMRSxmVHhiPvFmxZwbfh/ewogICJ2IjogMywKICAicSI6IHsKICAgICJmaW5kIjogewogICAgICAib3V0LnMxIiA6ICIxRkdiREZ6ejNLZTZ4OGRNM1RmYVNvR1JmeDF6M0JFVWtCIgogICAgfSwKICAgICJsaW1pdCI6IDEwCiAgfQp9)
