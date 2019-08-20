@@ -119,7 +119,7 @@ export class ViewerComponent implements OnInit {
     const offsetHeight = this.textContentElem.nativeElement.offsetHeight;
     const scrollTop = this.textContentElem.nativeElement.scrollTop;
     const diffFromBottom = scrollHeight - (scrollTop + offsetHeight);
-    return diffFromBottom === 0;
+    return diffFromBottom <= 0;
   }
 
   getChunkSize() {
